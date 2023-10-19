@@ -77,6 +77,15 @@ public class UserControllerTest {
                 .andDo(print());
     }
 
+    private String generateJwtToken() {
+        // Create a JWT token with a specific subject and expiration time
+        JwtBuilder jwtBuilder = Jwts.builder()
+                .setIssuedAt(new Date())
+                .setSubject("ariadna@ga.com")
+                .setExpiration(new Date((new Date()).getTime() + 86400000))
+                .signWith(SignatureAlgorithm.HS256, "C6UlILsE6GJwNqwCTkkvJj9O653yJUoteWMLfYyrc3vaGrrTOrJFAUD1wEBnnposzcQl");
+        return jwtBuilder.compact();
+    }
 
 
 }
