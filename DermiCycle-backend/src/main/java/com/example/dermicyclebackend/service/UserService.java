@@ -50,7 +50,7 @@ public class UserService {
         try {
             Authentication authentication = authenticationManager.authenticate(authenticationToken);
             SecurityContextHolder.getContext().setAuthentication(authentication);
-            MyUserDetails myUserDetailsDetails = (MyUserDetails) authentication.getPrincipal();
+            MyUserDetails myUserDetails = (MyUserDetails) authentication.getPrincipal();
             return Optional.of(jwtUtils.generateJwtToken(myUserDetails));
         } catch (Exception e) {
             return Optional.empty();
