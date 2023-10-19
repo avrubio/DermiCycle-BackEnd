@@ -73,7 +73,7 @@ public class AuthControllerTest {
         Optional<String> token = Optional.of("eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzdWVyc2gxMjNAZ21haWwuY29tIiwiaWF0IjoxNjk2MDA4NTg5LCJleHAiOjE2OTYwOTQ5ODl9.nJDx67WgI5JZiFL_LFz4uFxFVgOR_nVPMCbrcY8Dcx8");
         when(userService.loginUser(Mockito.any(LoginRequest.class))).thenReturn(token);
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/auth/doctors/login/")
+        mockMvc.perform(MockMvcRequestBuilders.post("/auth/users/login/")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(new ObjectMapper().writeValueAsString(request)))
                 .andExpect(status().isOk())
