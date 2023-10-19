@@ -1,6 +1,7 @@
 package com.example.dermicyclebackend.service;
 
 
+import com.example.dermicyclebackend.models.User;
 import com.example.dermicyclebackend.repository.UserRepository;
 import com.example.dermicyclebackend.security.JwtUtils;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -21,6 +22,9 @@ public class UserService {
         this.passwordEncoder = passwordEncoder;
         this.jwtUtils = jwtUtils;
         this.authenticationManager = authenticationManager;
+    }
+
+    public User createUser(User userObject) {
     }
 }
 
