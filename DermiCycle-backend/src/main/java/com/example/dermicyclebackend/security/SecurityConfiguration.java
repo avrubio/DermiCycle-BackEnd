@@ -1,2 +1,4 @@
-package com.example.dermicyclebackend.security;public class SecurityConfiguration {
+package com.example.dermicyclebackend.security;
+
+public class SecurityConfiguration {
 }
