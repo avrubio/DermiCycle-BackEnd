@@ -87,5 +87,13 @@ public class UserControllerTest {
         return jwtBuilder.compact();
     }
 
+    private MyUserDetails setup() {
+
+        // Create a User object with known properties
+       User ariadnaRecord = new User(1L, "suresh@ga.com", "password1234");
+        ariadnaRecord.setPassword("password");
+
+        return new MyUserDetails(ariadnaRecord);
+    }
 
 }
