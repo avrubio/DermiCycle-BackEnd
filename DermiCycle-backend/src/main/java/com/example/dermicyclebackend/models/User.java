@@ -1,19 +1,29 @@
 package com.example.dermicyclebackend.models;
 
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
+
+import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "users")
 public class User {
 
     @Id
+    @Column
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(unique = true)
     private String emailAddress;
+    @Column
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
-
+@OneToMany(mappedBy = "user")
+@LazyCollection(LazyCollectionOption.FALSE)
+    private List<Product> productList;
     public User() {
     }
 
@@ -21,6 +31,14 @@ public class User {
         this.id = id;
         this.emailAddress = emailAddress;
         this.password = password;
+    }
+
+    public List<Product> getProductList() {
+        return productList;
+    }
+
+    public void setProductList(List<Product> productList) {
+        this.productList = productList;
     }
 
     public Long getId() {

@@ -1,5 +1,9 @@
 package com.example.dermicyclebackend.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
+
 import javax.persistence.*;
 import javax.persistence.Id;
 import javax.persistence.Table;
@@ -8,10 +12,27 @@ import javax.persistence.Table;
 @Table(name = "products")
 public class Product {
     @Id
+    @Column
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
+@Column
     private String name;
+@Column
     private String directions;
+@ManyToOne
+@JoinColumn(name = "user_id")
+@LazyCollection(LazyCollectionOption.FALSE)
+@JsonIgnore
+    private User user;
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+
 
     public Product() {
     }

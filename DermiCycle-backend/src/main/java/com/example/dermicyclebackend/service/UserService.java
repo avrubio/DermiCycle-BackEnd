@@ -23,16 +23,17 @@ import java.util.Optional;
 @Service
 public class UserService {
     private final UserRepository userRepository;
-private final ProductRepository productRepository;
+    private final ProductRepository productRepository;
     private final PasswordEncoder passwordEncoder;
 
     private final JwtUtils jwtUtils;
     private final AuthenticationManager authenticationManager;
 @Autowired
-    public UserService(UserRepository userRepository, ProductRepository productRepository, PasswordEncoder passwordEncoder, JwtUtils jwtUtils, @Lazy AuthenticationManager authenticationManager) {
+    public UserService(UserRepository userRepository, ProductRepository productRepository, PasswordEncoder passwordEncoder,
+                       JwtUtils jwtUtils, @Lazy AuthenticationManager authenticationManager) {
         this.userRepository = userRepository;
-    this.productRepository = productRepository;
-    this.passwordEncoder = passwordEncoder;
+        this.productRepository = productRepository;
+        this.passwordEncoder = passwordEncoder;
         this.jwtUtils = jwtUtils;
         this.authenticationManager = authenticationManager;
     }
@@ -59,7 +60,9 @@ private final ProductRepository productRepository;
             return Optional.empty();
         }
     }
-
+    public User findUserByEmailAddress(String emailAddress) {
+        return userRepository.findUserByEmailAddress(emailAddress);
+    }
     public Optional<Product> createProductUser(Long userId, Product productObject) {
     Product product = productRepository.findByUserIdAndEmailAddress(getCurrentLoggedInUser().getId(), productObject.getName(), productObject.getDirections());
     if(product != null){
@@ -70,9 +73,11 @@ private final ProductRepository productRepository;
     }
 }
 
-    private Product getCurrentLoggedInUser() {
+    public static User getCurrentLoggedInUser() {
     MyUserDetails userDetails = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     return userDetails.getUser();
     }
+
+
 }
 

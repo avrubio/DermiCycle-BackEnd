@@ -54,7 +54,7 @@ public class UserControllerTest {
     @Autowired
     ObjectMapper objectMapper;
 
-    User RECORD_1 = new User(1L, "ariadna@ga.com", "password123");
+//    User RECORD_1 = new User(1L, "ariadna@ga.com", "password123");
 
     Product PRODUCT_1 = new Product(1L, "Snail Mucin", "Apply after toner");
 
@@ -67,6 +67,8 @@ public class UserControllerTest {
                 .thenReturn(Optional.ofNullable(PRODUCT_1));
 
         MyUserDetails userDetails = setup();
+
+        when(myUserDetailsService.loadUserByUsername("ariadnah@ga.com")).thenReturn(userDetails);
 
         mockMvc.perform(MockMvcRequestBuilders.post("/api/users/products/")
                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + generateJwtToken())

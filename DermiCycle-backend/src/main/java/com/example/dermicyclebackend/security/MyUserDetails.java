@@ -7,7 +7,7 @@ import java.util.Collection;
 import java.util.HashSet;
 
 /**
- * Custom UserDetails implementation for Doctor entities.
+ * Custom UserDetails implementation for User entities.
  */
 public class MyUserDetails implements UserDetails {
 
