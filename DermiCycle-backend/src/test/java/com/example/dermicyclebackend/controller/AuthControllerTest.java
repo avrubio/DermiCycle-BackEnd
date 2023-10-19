@@ -2,6 +2,7 @@ package com.example.dermicyclebackend.controller;
 
 import com.example.dermicyclebackend.models.User;
 import com.example.dermicyclebackend.repository.UserRepository;
+import com.example.dermicyclebackend.request.LoginRequest;
 import com.example.dermicyclebackend.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Test;
@@ -19,6 +20,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+
+import java.util.Optional;
 
 import static org.hamcrest.core.IsNull.notNullValue;
 import static org.mockito.Mockito.when;
@@ -60,6 +63,21 @@ public class AuthControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value((RECORD_1.getId())))
                 .andExpect(jsonPath("$.emailAddress").value(RECORD_1.getEmailAddress()))
+                .andDo(print());
+    }
+    @Test
+    public void loginUser() throws Exception {
+        LoginRequest request = new LoginRequest();
+        request.setEmailAddress("suresh123@gmail.com");
+        request.setPassword("suresh123");
+        Optional<String> token = Optional.of("eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzdWVyc2gxMjNAZ21haWwuY29tIiwiaWF0IjoxNjk2MDA4NTg5LCJleHAiOjE2OTYwOTQ5ODl9.nJDx67WgI5JZiFL_LFz4uFxFVgOR_nVPMCbrcY8Dcx8");
+        when(userService.loginUser(Mockito.any(LoginRequest.class))).thenReturn(token);
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/auth/doctors/login/")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(new ObjectMapper().writeValueAsString(request)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.jwt").value(token.get()))
                 .andDo(print());
     }
 
