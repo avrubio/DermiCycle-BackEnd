@@ -58,7 +58,6 @@ public class AuthControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(new ObjectMapper().writeValueAsString(RECORD_1)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$", notNullValue()))
                 .andExpect(jsonPath("$.id").value((RECORD_1.getId())))
                 .andExpect(jsonPath("$.emailAddress").value(RECORD_1.getEmailAddress()))
                 .andDo(print());

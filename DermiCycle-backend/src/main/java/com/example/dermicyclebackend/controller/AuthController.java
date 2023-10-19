@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping(path ="/auth/users/") // http://localhost:0317/auth/user
+@RequestMapping(path ="/auth/users") // http://localhost:0317/auth/user
 public class AuthController {
 
     private UserService userService;
