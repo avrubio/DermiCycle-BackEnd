@@ -54,11 +54,10 @@ public class AuthControllerTest {
     public void createUser() throws Exception {
         when(userService.createUser(Mockito.any(User.class))).thenReturn(RECORD_1);
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/auth/user/register/")
+        mockMvc.perform(MockMvcRequestBuilders.post("/auth/users/register/")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(new ObjectMapper().writeValueAsString(RECORD_1)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$", notNullValue()))
                 .andExpect(jsonPath("$.id").value((RECORD_1.getId())))
                 .andExpect(jsonPath("$.emailAddress").value(RECORD_1.getEmailAddress()))
                 .andDo(print());
