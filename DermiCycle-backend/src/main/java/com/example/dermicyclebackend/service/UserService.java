@@ -2,7 +2,9 @@ package com.example.dermicyclebackend.service;
 
 
 import com.example.dermicyclebackend.exception.InformationExistException;
+import com.example.dermicyclebackend.models.Product;
 import com.example.dermicyclebackend.models.User;
+import com.example.dermicyclebackend.repository.ProductRepository;
 import com.example.dermicyclebackend.repository.UserRepository;
 import com.example.dermicyclebackend.request.LoginRequest;
 import com.example.dermicyclebackend.security.JwtUtils;
@@ -21,15 +23,16 @@ import java.util.Optional;
 @Service
 public class UserService {
     private final UserRepository userRepository;
-
+private final ProductRepository productRepository;
     private final PasswordEncoder passwordEncoder;
 
     private final JwtUtils jwtUtils;
     private final AuthenticationManager authenticationManager;
 @Autowired
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, JwtUtils jwtUtils,@Lazy AuthenticationManager authenticationManager) {
+    public UserService(UserRepository userRepository, ProductRepository productRepository, PasswordEncoder passwordEncoder, JwtUtils jwtUtils, @Lazy AuthenticationManager authenticationManager) {
         this.userRepository = userRepository;
-        this.passwordEncoder = passwordEncoder;
+    this.productRepository = productRepository;
+    this.passwordEncoder = passwordEncoder;
         this.jwtUtils = jwtUtils;
         this.authenticationManager = authenticationManager;
     }
@@ -56,5 +59,15 @@ public class UserService {
             return Optional.empty();
         }
     }
+
+    public Optional<Product> createProductUser(Long userId, Product productObject) {
+    Product product = productRepository.findByUserIdAndEmailAddress(getCurrentLoggedInUser().getId(), productObject.getName(), productObject.getDirections());
+    if(product != null){
+        throw new InformationExistException("Product already exists and is a product of User with id " + userId);
+    } else {
+        productObject.setUser(getCurrentLoggedInUser());
+        return Optional.of(productRepository.save(productObject));
+    }
+}
 }
 
