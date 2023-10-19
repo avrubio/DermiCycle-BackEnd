@@ -69,5 +69,10 @@ private final ProductRepository productRepository;
         return Optional.of(productRepository.save(productObject));
     }
 }
+
+    private Product getCurrentLoggedInUser() {
+    MyUserDetails userDetails = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    return userDetails.getUser();
+    }
 }
 
