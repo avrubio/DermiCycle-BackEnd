@@ -3,8 +3,10 @@ package com.example.dermicyclebackend.service;
 
 import com.example.dermicyclebackend.exception.InformationExistException;
 import com.example.dermicyclebackend.models.Product;
+import com.example.dermicyclebackend.models.Stage;
 import com.example.dermicyclebackend.models.User;
 import com.example.dermicyclebackend.repository.ProductRepository;
+import com.example.dermicyclebackend.repository.StageRepository;
 import com.example.dermicyclebackend.repository.UserRepository;
 import com.example.dermicyclebackend.request.LoginRequest;
 import com.example.dermicyclebackend.security.JwtUtils;
@@ -17,13 +19,13 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.Optional;
 
 @Service
 public class UserService {
     private final UserRepository userRepository;
+    private final StageRepository stageRepository;
     private final ProductRepository productRepository;
     private final PasswordEncoder passwordEncoder;
 
@@ -31,10 +33,12 @@ public class UserService {
     private final AuthenticationManager authenticationManager;
 
     @Autowired
-    public UserService(UserRepository userRepository, ProductRepository productRepository, PasswordEncoder passwordEncoder,
+    public UserService(UserRepository userRepository, ProductRepository productRepository,
+                       StageRepository stageRepository, PasswordEncoder passwordEncoder,
                        JwtUtils jwtUtils, @Lazy AuthenticationManager authenticationManager) {
         this.userRepository = userRepository;
         this.productRepository = productRepository;
+        this.stageRepository = stageRepository;
         this.passwordEncoder = passwordEncoder;
         this.jwtUtils = jwtUtils;
         this.authenticationManager = authenticationManager;
@@ -43,7 +47,18 @@ public class UserService {
     public User createUser(User userObject) {
         if (!userRepository.existsByEmailAddress(userObject.getEmailAddress())) {
             userObject.setPassword(passwordEncoder.encode(userObject.getPassword()));
-            return userRepository.save(userObject);
+            Stage stage1 = new Stage("Stage 1", "Exfoliation", "1 day");
+            Stage stage2 = new Stage("Stage 2", "Retnoid", "1 day");
+            Stage stage3 = new Stage("Stage 3", "Recovery", "1 day");
+            User newUser = userRepository.save(userObject);
+            stage1.setUser(newUser);
+            stage2.setUser(newUser);
+            stage3.setUser(newUser);
+            stageRepository.save(stage1);
+            stageRepository.save(stage2);
+            stageRepository.save(stage3);
+
+            return newUser;
 
         } else {
             throw new InformationExistException("user with email address " + userObject.getEmailAddress() + " already exists!");
@@ -67,16 +82,14 @@ public class UserService {
         return userRepository.findUserByEmailAddress(emailAddress);
     }
 
-    public Optional<Product> createProductUser(@RequestBody  Product productObject) {
+    public Optional<Product> createProductUser(Product productObject) {
         Product product = productRepository.findByNameAndUser(productObject.getName(), getCurrentLoggedInUser());
-        return Optional.of(productObject);
-
-//        if (Optional.of(productObject) != null) {
-//            throw new InformationExistException("Product already exists" );
-//        } else {
-//            productObject.setUser(getCurrentLoggedInUser());
-//            return Optional.of(productRepository.save(productObject));
-//        }
+        if (product != null) {
+            throw new InformationExistException("Product already exists and is a product of User with id " + getCurrentLoggedInUser().getId());
+        } else {
+            productObject.setUser(getCurrentLoggedInUser());
+            return Optional.of(productRepository.save(productObject));
+        }
     }
 
     public static User getCurrentLoggedInUser() {
