@@ -31,7 +31,7 @@ public class AuthController {
      * @param userObject The User object representing the user to be registered.
      * @return The registered User object.
      */
-    @PostMapping("/register") // http://localhost:0317/auth/users/register/
+    @PostMapping("/register/") // http://localhost:0317/auth/users/register/
     public User createUser(@RequestBody User userObject) {
         return userService.createUser(userObject);
     }
