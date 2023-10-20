@@ -1,2 +1,4 @@
-package com.example.dermicyclebackend.repository;public interface UserProfileRepository {
+package com.example.dermicyclebackend.repository;
+
+public interface UserProfileRepository {
 }
