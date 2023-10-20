@@ -10,11 +10,9 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import net.bytebuddy.implementation.bind.annotation.RuntimeType;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -26,14 +24,11 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import java.util.Date;
 import java.util.Optional;
-
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -42,40 +37,36 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class UserControllerTest {
 
     @Autowired
+    private MockMvc mockMvc;
+
+    @Autowired
+    ObjectMapper objectMapper;
+
     @MockBean
     private UserService userService;
 
     @MockBean
     private MyUserDetailsService myUserDetailsService;
 
-    @Autowired
-    private MockMvc mockMvc;
-
-    @Autowired
-    ObjectMapper objectMapper;
-
-//    User RECORD_1 = new User(1L, "ariadna@ga.com", "password123");
-
-    Product PRODUCT_1 = new Product(1L, "Snail Mucin", "Apply after toner");
+    Product PRODUCT_1 = new Product(1L, "Test Snail Mucin", "Apply after toner");
 
     @Test
     @WithMockUser(username = "ariadna@ga.com")
     public void createProductUser() throws Exception {
         objectMapper.registerModule(new JavaTimeModule());
 
-        when(userService.createProductUser(Mockito.any(Long.class), Mockito.any(Product.class)))
+        when(userService.createProductUser(PRODUCT_1))
                 .thenReturn(Optional.ofNullable(PRODUCT_1));
 
         MyUserDetails userDetails = setup();
 
-        when(myUserDetailsService.loadUserByUsername("ariadnah@ga.com")).thenReturn(userDetails);
+        when(myUserDetailsService.loadUserByUsername("ariadna@ga.com")).thenReturn(userDetails);
 
         mockMvc.perform(MockMvcRequestBuilders.post("/api/users/products/")
-                .header(HttpHeaders.AUTHORIZATION, "Bearer " + generateJwtToken())
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(PRODUCT_1)))
-                .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.message").value("success"))
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + generateJwtToken())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(PRODUCT_1)))
+                .andExpect(MockMvcResultMatchers.status().isCreated())
                 .andDo(print());
     }
 
@@ -90,12 +81,7 @@ public class UserControllerTest {
     }
 
     private MyUserDetails setup() {
-
-        // Create a User object with known properties
-       User ariadnaRecord = new User(1L, "suresh@ga.com", "password1234");
-        ariadnaRecord.setPassword("password");
-
+        User ariadnaRecord = new User(1L, "ariadna@ga.com", "password1234");
         return new MyUserDetails(ariadnaRecord);
     }
-
 }

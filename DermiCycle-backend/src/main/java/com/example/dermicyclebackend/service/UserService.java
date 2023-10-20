@@ -17,6 +17,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.Optional;
 
@@ -28,7 +29,8 @@ public class UserService {
 
     private final JwtUtils jwtUtils;
     private final AuthenticationManager authenticationManager;
-@Autowired
+
+    @Autowired
     public UserService(UserRepository userRepository, ProductRepository productRepository, PasswordEncoder passwordEncoder,
                        JwtUtils jwtUtils, @Lazy AuthenticationManager authenticationManager) {
         this.userRepository = userRepository;
@@ -39,11 +41,11 @@ public class UserService {
     }
 
     public User createUser(User userObject) {
-        if(!userRepository.existsByEmailAddress(userObject.getEmailAddress())) {
+        if (!userRepository.existsByEmailAddress(userObject.getEmailAddress())) {
             userObject.setPassword(passwordEncoder.encode(userObject.getPassword()));
             return userRepository.save(userObject);
 
-        }else {
+        } else {
             throw new InformationExistException("user with email address " + userObject.getEmailAddress() + " already exists!");
         }
     }
@@ -60,24 +62,27 @@ public class UserService {
             return Optional.empty();
         }
     }
+
     public User findUserByEmailAddress(String emailAddress) {
         return userRepository.findUserByEmailAddress(emailAddress);
     }
-    public Optional<Product> createProductUser(Long userId, Product productObject) {
-    Product product = productRepository.findByUserIdAndEmailAddress(getCurrentLoggedInUser().getId(), productObject.getName(), productObject.getDirections());
-    if(product != null){
-        throw new InformationExistException("Product already exists and is a product of User with id " + userId);
-    } else {
-        productObject.setUser(getCurrentLoggedInUser());
-        return Optional.of(productRepository.save(productObject));
+
+    public Optional<Product> createProductUser(@RequestBody  Product productObject) {
+        Product product = productRepository.findByNameAndUser(productObject.getName(), getCurrentLoggedInUser());
+        return Optional.of(productObject);
+
+//        if (Optional.of(productObject) != null) {
+//            throw new InformationExistException("Product already exists" );
+//        } else {
+//            productObject.setUser(getCurrentLoggedInUser());
+//            return Optional.of(productRepository.save(productObject));
+//        }
     }
-}
 
     public static User getCurrentLoggedInUser() {
-    MyUserDetails userDetails = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-    return userDetails.getUser();
+        MyUserDetails userDetails = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return userDetails.getUser();
     }
 
 
 }
-
