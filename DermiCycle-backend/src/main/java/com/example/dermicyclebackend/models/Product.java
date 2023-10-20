@@ -24,6 +24,11 @@ public class Product {
 @LazyCollection(LazyCollectionOption.FALSE)
 @JsonIgnore
     private User user;
+
+@OneToOne
+@JoinColumn(name= "stage_id")
+@LazyCollection(LazyCollectionOption.FALSE)
+    private Stage stage;
     public User getUser() {
         return user;
     }
