@@ -27,8 +27,8 @@ import java.util.Optional;
 @Service
 public class UserService {
     private final UserRepository userRepository;
-    private final StageRepository stageRepository;
-    private final ProductRepository productRepository;
+    private static final StageRepository stageRepository;
+    private static final ProductRepository productRepository;
     private final PasswordEncoder passwordEncoder;
 
     private final JwtUtils jwtUtils;
@@ -98,12 +98,31 @@ public class UserService {
         }
     }
 
+
+
     public static User getCurrentLoggedInUser() {
         MyUserDetails userDetails = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         return userDetails.getUser();
     }
 
 
+    public static Product getProductUserWithStage(ProductWithStage productWithStageObject) {
+        Product product = productRepository.findByNameAndUser(productWithStageObject.getName(), getCurrentLoggedInUser());
+        if (product != null) {
+            throw new InformationExistException("Product already exists and is a product of User with id " + getCurrentLoggedInUser().getId());
+        } else {
+            Product newProduct = new Product();
+            // handle the error and throw the exception ??
+            Stage stage = stageRepository.findByProductId(productWithStageObject);
+            newProduct.setStage(stage);
+            newProduct.setUser(getCurrentLoggedInUser());
+            newProduct.setName(productWithStageObject.getName());
+            newProduct.setDirections(productWithStageObject.getDirections());
+            productRepository.save(newProduct);
 
+            return new ProductWithStageResponse(
+                    newProduct.getId(), newProduct.getName(), newProduct.getDirections(), stage.getId(), stage.getName(), stage.getDescription());
+        }
+    }
 }
 

@@ -87,10 +87,8 @@ public class UserControllerTest {
 
         long productId = 1L;
 
-        ProductWithStageResponse productResponse = new ProductWithStageResponse(1L, "Test Product", "Description", 1L, "StageName", "StageDescription");
-
         // Mock the behavior of the userService to return a product response
-        when(userService.getProductUserWithStage(productId)).thenReturn(productResponse);
+        when(userService.getProductUserWithStage(productId)).thenReturn(PRODUCT_1);
 
         // Mock the behavior of myUserDetailsService to return the current user
         MyUserDetails userDetails = setup();
