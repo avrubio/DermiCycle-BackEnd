@@ -85,16 +85,16 @@ public class UserControllerTest {
     public void getProductUserWithStage() throws Exception {
         objectMapper.registerModule(new JavaTimeModule());
 
-        long productId = 1L;
+
 
         // Mock the behavior of the userService to return a product response
-        when(userService.getProductUserWithStage(productId)).thenReturn(PRODUCT_1);
+        when(userService.getProductUserWithStage(PRODUCT_1.getId()).thenReturn(PRODUCT_1));
 
         // Mock the behavior of myUserDetailsService to return the current user
         MyUserDetails userDetails = setup();
         when(myUserDetailsService.loadUserByUsername("ariadna@ga.com")).thenReturn(userDetails);
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/users/products/{productId}", productId)
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/users/products/{productId}", PRODUCT_1.getId())
                         .header(HttpHeaders.AUTHORIZATION, "Bearer " + generateJwtToken()))
                 .andExpect(status().isOk())
                 .andDo(print());

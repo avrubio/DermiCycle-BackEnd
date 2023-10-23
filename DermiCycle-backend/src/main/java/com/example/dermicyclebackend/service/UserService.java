@@ -27,8 +27,8 @@ import java.util.Optional;
 @Service
 public class UserService {
     private final UserRepository userRepository;
-    private static final StageRepository stageRepository;
-    private static final ProductRepository productRepository;
+    private  final StageRepository stageRepository;
+    private final ProductRepository productRepository;
     private final PasswordEncoder passwordEncoder;
 
     private final JwtUtils jwtUtils;
@@ -87,14 +87,14 @@ public class UserService {
             Product newProduct = new Product();
             // handle the error and throw the exception ??
             Stage stage = stageRepository.findById(productWithStageObject.getStageId()).get();
-            newProduct.setStage(stage);
+//            newProduct.setStage(stage);
             newProduct.setUser(getCurrentLoggedInUser());
             newProduct.setName(productWithStageObject.getName());
             newProduct.setDirections(productWithStageObject.getDirections());
             productRepository.save(newProduct);
 
             return new ProductWithStageResponse(
-                    newProduct.getId(), newProduct.getName(), newProduct.getDirections(), stage.getId(), stage.getName(), stage.getDescription());
+                    newProduct.getId().getStageId(), newProduct.getName(), newProduct.getDirections(), stage.getId(), stage.getName(), stage.getDescription());
         }
     }
 

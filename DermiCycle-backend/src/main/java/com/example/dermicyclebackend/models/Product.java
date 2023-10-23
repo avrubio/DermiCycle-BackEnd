@@ -1,5 +1,6 @@
 package com.example.dermicyclebackend.models;
 
+import com.example.dermicyclebackend.request.ProductWithStage;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
@@ -58,7 +59,7 @@ public class Product {
         this.directions = directions;
     }
 
-    public Long getId() {
+    public ProductWithStage getId() {
         return id;
     }
 
