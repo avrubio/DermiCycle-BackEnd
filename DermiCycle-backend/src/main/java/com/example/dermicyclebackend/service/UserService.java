@@ -9,6 +9,8 @@ import com.example.dermicyclebackend.repository.ProductRepository;
 import com.example.dermicyclebackend.repository.StageRepository;
 import com.example.dermicyclebackend.repository.UserRepository;
 import com.example.dermicyclebackend.request.LoginRequest;
+import com.example.dermicyclebackend.request.ProductWithStage;
+import com.example.dermicyclebackend.response.ProductWithStageResponse;
 import com.example.dermicyclebackend.security.JwtUtils;
 import com.example.dermicyclebackend.security.MyUserDetails;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,17 +49,10 @@ public class UserService {
     public User createUser(User userObject) {
         if (!userRepository.existsByEmailAddress(userObject.getEmailAddress())) {
             userObject.setPassword(passwordEncoder.encode(userObject.getPassword()));
-            Stage stage1 = new Stage("Stage 1", "Exfoliation", "1 day");
-            Stage stage2 = new Stage("Stage 2", "Retnoid", "1 day");
-            Stage stage3 = new Stage("Stage 3", "Recovery", "1 day");
+            Stage stage1 = new Stage("Stage 1", "Stage 1", "1 day");
             User newUser = userRepository.save(userObject);
             stage1.setUser(newUser);
-            stage2.setUser(newUser);
-            stage3.setUser(newUser);
             stageRepository.save(stage1);
-            stageRepository.save(stage2);
-            stageRepository.save(stage3);
-
             return newUser;
 
         } else {
@@ -82,13 +77,33 @@ public class UserService {
         return userRepository.findUserByEmailAddress(emailAddress);
     }
 
-    public Optional<Product> createProductUser(Product productObject) {
-        Product product = productRepository.findByNameAndUser(productObject.getName(), getCurrentLoggedInUser());
+//    public Optional<Product> createProductUser(Product productObject) {
+//        Product product = productRepository.findByNameAndUser(productObject.getName(), getCurrentLoggedInUser());
+//        if (product != null) {
+//            throw new InformationExistException("Product already exists and is a product of User with id " + getCurrentLoggedInUser().getId());
+//        } else {
+//            productObject.setUser(getCurrentLoggedInUser());
+//            return Optional.of(productRepository.save(productObject));
+//        }
+//    }
+
+
+    public ProductWithStageResponse createProductUserWithStage(ProductWithStage productWithStageObject) {
+        Product product = productRepository.findByNameAndUser(productWithStageObject.getName(), getCurrentLoggedInUser());
         if (product != null) {
             throw new InformationExistException("Product already exists and is a product of User with id " + getCurrentLoggedInUser().getId());
         } else {
-            productObject.setUser(getCurrentLoggedInUser());
-            return Optional.of(productRepository.save(productObject));
+            Product newProduct = new Product();
+            // handle the error and throw the exception ??
+            Stage stage = stageRepository.findById(productWithStageObject.getStageId()).get();
+            newProduct.setStage(stage);
+            newProduct.setUser(getCurrentLoggedInUser());
+            newProduct.setName(productWithStageObject.getName());
+            newProduct.setDirections(productWithStageObject.getDirections());
+            productRepository.save(newProduct);
+
+            return new ProductWithStageResponse(
+                    newProduct.getId(), newProduct.getName(), newProduct.getDirections(), stage.getId(), stage.getName(), stage.getDescription());
         }
     }
 
@@ -98,4 +113,6 @@ public class UserService {
     }
 
 
+
 }
+

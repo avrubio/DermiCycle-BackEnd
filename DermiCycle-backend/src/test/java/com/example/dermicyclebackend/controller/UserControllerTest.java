@@ -2,6 +2,8 @@ package com.example.dermicyclebackend.controller;
 
 import com.example.dermicyclebackend.models.Product;
 import com.example.dermicyclebackend.models.User;
+import com.example.dermicyclebackend.request.ProductWithStage;
+import com.example.dermicyclebackend.response.ProductWithStageResponse;
 import com.example.dermicyclebackend.security.MyUserDetails;
 import com.example.dermicyclebackend.service.MyUserDetailsService;
 import com.example.dermicyclebackend.service.UserService;
@@ -12,7 +14,6 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -25,10 +26,14 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+
 import java.util.Date;
 import java.util.Optional;
+
+import static com.example.dermicyclebackend.service.UserService.getCurrentLoggedInUser;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -42,6 +47,7 @@ public class UserControllerTest {
     @Autowired
     ObjectMapper objectMapper;
 
+
     @MockBean
     private UserService userService;
 
@@ -52,11 +58,15 @@ public class UserControllerTest {
 
     @Test
     @WithMockUser(username = "ariadna@ga.com")
-    public void createProductUser() throws Exception {
+    public void createProductUserWithStage() throws Exception {
         objectMapper.registerModule(new JavaTimeModule());
 
-        when(userService.createProductUser(PRODUCT_1))
-                .thenReturn(Optional.ofNullable(PRODUCT_1));
+        ProductWithStage productWithStage = new ProductWithStage("Test Snail Mucin", "Apply after toner", 1L);
+
+        ProductWithStageResponse productResponse = new ProductWithStageResponse(1L, "Test Snail Mucin", "Apply after toner", 1L, "StageName", "StageDescription");
+
+        when(userService.createProductUserWithStage(productWithStage)).thenReturn(productResponse);
+
 
         MyUserDetails userDetails = setup();
 
@@ -65,10 +75,11 @@ public class UserControllerTest {
         mockMvc.perform(MockMvcRequestBuilders.post("/api/users/products/")
                         .header(HttpHeaders.AUTHORIZATION, "Bearer " + generateJwtToken())
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(PRODUCT_1)))
+                        .content(objectMapper.writeValueAsString(productWithStage)))
                 .andExpect(MockMvcResultMatchers.status().isCreated())
                 .andDo(print());
     }
+
 
     private String generateJwtToken() {
         // Create a JWT token with a specific subject and expiration time

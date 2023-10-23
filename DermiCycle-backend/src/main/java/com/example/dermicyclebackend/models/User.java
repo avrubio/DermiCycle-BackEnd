@@ -21,9 +21,10 @@ public class User {
     @Column
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
-@OneToMany(mappedBy = "user")
-@LazyCollection(LazyCollectionOption.FALSE)
+    @OneToMany(mappedBy = "user")
+    @LazyCollection(LazyCollectionOption.FALSE)
     private List<Product> productList;
+
     public User() {
     }
 
@@ -73,8 +74,6 @@ public class User {
                 ", password='" + password + '\'' +
                 '}';
     }
-
-
 
 
 }

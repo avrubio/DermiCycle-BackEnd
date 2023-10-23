@@ -15,20 +15,31 @@ public class Product {
     @Column
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-@Column
+
+    @Column
     private String name;
-@Column
+
+    @Column
     private String directions;
-@ManyToOne
-@JoinColumn(name = "user_id")
-@LazyCollection(LazyCollectionOption.FALSE)
-@JsonIgnore
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    @LazyCollection(LazyCollectionOption.FALSE)
+    @JsonIgnore
     private User user;
 
-@OneToOne
-@JoinColumn(name= "stage_id")
-@LazyCollection(LazyCollectionOption.FALSE)
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "stage_id", referencedColumnName = "id")
     private Stage stage;
+
+    public Stage getStage() {
+        return stage;
+    }
+
+    public void setStage(Stage stage) {
+        this.stage = stage;
+    }
+
     public User getUser() {
         return user;
     }
@@ -36,7 +47,6 @@ public class Product {
     public void setUser(User user) {
         this.user = user;
     }
-
 
 
     public Product() {

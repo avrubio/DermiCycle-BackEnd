@@ -1,8 +1,8 @@
 package com.example.dermicyclebackend.controller;
 
 import com.example.dermicyclebackend.exception.InformationExistException;
-import com.example.dermicyclebackend.models.Product;
-import com.example.dermicyclebackend.repository.ProductRepository;
+import com.example.dermicyclebackend.request.ProductWithStage;
+import com.example.dermicyclebackend.response.ProductWithStageResponse;
 import com.example.dermicyclebackend.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -10,13 +10,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
-import java.util.Optional;
 
 @RestController
 @RequestMapping(path = "/api/users")
 public class UserController {
     private UserService userService;
-private ProductRepository productRepository;
+
     /**
      * Constructor-based autowiring of the UserService dependency.
      *
@@ -33,19 +32,12 @@ private ProductRepository productRepository;
     /**
      * Endpoint for creating a new product under the current user
      *
-     * @param productObject The Product object representing the product to be created.
-     * @return A ResponseEntity indicating success or conflict along with a message and data.
-     */
-    /**
-     * Endpoint for creating a new product under the current user
-     *
-     * @param productObject The Product object representing the product to be created.
      * @return A ResponseEntity indicating success or conflict along with a message and data.
      */
     @PostMapping(path = "/products/")
-    public ResponseEntity<?> createProductUser(@RequestBody Product productObject) {
+    public ResponseEntity<?> createProductUser(@RequestBody ProductWithStage productWithStageObject) {
         try {
-            Optional<Product> product = userService.createProductUser(productObject);
+            ProductWithStageResponse product = userService.createProductUserWithStage(productWithStageObject);
             message.put("message", "success");
             message.put("data", product);
             return new ResponseEntity<>(message, HttpStatus.CREATED);
