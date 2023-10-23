@@ -77,15 +77,6 @@ public class UserService {
         return userRepository.findUserByEmailAddress(emailAddress);
     }
 
-//    public Optional<Product> createProductUser(Product productObject) {
-//        Product product = productRepository.findByNameAndUser(productObject.getName(), getCurrentLoggedInUser());
-//        if (product != null) {
-//            throw new InformationExistException("Product already exists and is a product of User with id " + getCurrentLoggedInUser().getId());
-//        } else {
-//            productObject.setUser(getCurrentLoggedInUser());
-//            return Optional.of(productRepository.save(productObject));
-//        }
-//    }
 
 
     public ProductWithStageResponse createProductUserWithStage(ProductWithStage productWithStageObject) {

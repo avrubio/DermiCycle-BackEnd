@@ -80,6 +80,28 @@ public class UserControllerTest {
                 .andDo(print());
     }
 
+    @Test
+    @WithMockUser(username = "ariadna@ga.com")
+    public void getProductUserWithStage() throws Exception {
+        objectMapper.registerModule(new JavaTimeModule());
+
+        long productId = 1L;
+
+        ProductWithStageResponse productResponse = new ProductWithStageResponse(1L, "Test Product", "Description", 1L, "StageName", "StageDescription");
+
+        // Mock the behavior of the userService to return a product response
+        when(userService.getProductUserWithStage(productId)).thenReturn(productResponse);
+
+        // Mock the behavior of myUserDetailsService to return the current user
+        MyUserDetails userDetails = setup();
+        when(myUserDetailsService.loadUserByUsername("ariadna@ga.com")).thenReturn(userDetails);
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/users/products/{productId}", productId)
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + generateJwtToken()))
+                .andExpect(status().isOk())
+                .andDo(print());
+    }
+
 
     private String generateJwtToken() {
         // Create a JWT token with a specific subject and expiration time
@@ -95,4 +117,7 @@ public class UserControllerTest {
         User ariadnaRecord = new User(1L, "ariadna@ga.com", "password1234");
         return new MyUserDetails(ariadnaRecord);
     }
+
+
+
 }
