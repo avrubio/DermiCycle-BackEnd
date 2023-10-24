@@ -2,6 +2,7 @@ package com.example.dermicyclebackend.controller;
 
 import com.example.dermicyclebackend.models.User;
 import com.example.dermicyclebackend.request.LoginRequest;
+import com.example.dermicyclebackend.request.RegisterRequest;
 import com.example.dermicyclebackend.response.LoginResponse;
 import com.example.dermicyclebackend.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,8 +33,8 @@ public class AuthController {
      * @return The registered User object.
      */
     @PostMapping("/register/") // http://localhost:0317/auth/users/register/
-    public User createUser(@RequestBody User userObject) {
-        return userService.createUser(userObject);
+    public User createUser(@RequestBody RegisterRequest registerRequestObject) {
+        return userService.createUser(registerRequestObject);
     }
 
     //LOGIN USER (Post)
