@@ -10,6 +10,8 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import javax.transaction.Transactional;
+
 @Component
 public class SeedData implements CommandLineRunner {
     private final PasswordEncoder passwordEncoder;
@@ -25,6 +27,7 @@ public class SeedData implements CommandLineRunner {
     }
 
     @Override
+    @Transactional // Add the @Transactional annotation
     public void run(String... args) throws Exception {
         User user = new User();
         user.setEmailAddress("user@example.com");
@@ -32,12 +35,13 @@ public class SeedData implements CommandLineRunner {
         userRepository.save(user);
 
         Stage stage1 = new Stage("Stage 1", "Exfoliation", "1 day");
-        Stage stage2 = new Stage("Stage 1", "Retnoid", "1 day");
-        Stage stage3 = new Stage("Stage 1", "Recovery", "2 days");
+        Stage stage2 = new Stage("Stage 2", "Retinoid", "1 day");
+        Stage stage3 = new Stage("Stage 3", "Recovery", "2 days");
 
         stage1.setUser(user);
         stage2.setUser(user);
         stage3.setUser(user);
+
         stageRepository.save(stage1);
         stageRepository.save(stage2);
         stageRepository.save(stage3);
@@ -51,7 +55,7 @@ public class SeedData implements CommandLineRunner {
 
         Product product2 = new Product();
         product2.setName("Product 2");
-        product2.setDirections("AProduct 2");
+        product2.setDirections("Product 2");
         product2.setStage(stage1);
         product2.setUser(user);
         productRepository.save(product2);
@@ -63,14 +67,12 @@ public class SeedData implements CommandLineRunner {
         product3.setUser(user);
         productRepository.save(product3);
 
-
         Product product4 = new Product();
         product4.setName("Product 4");
         product4.setDirections("Product 4 ");
         product4.setStage(stage2);
         product4.setUser(user);
         productRepository.save(product4);
-
 
         Product product5 = new Product();
         product5.setName("Product 5");
