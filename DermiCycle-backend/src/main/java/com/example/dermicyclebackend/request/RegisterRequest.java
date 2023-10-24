@@ -1,66 +1,54 @@
-package com.example.dermicyclebackend.models;
-
-import javax.persistence.*;
+package com.example.dermicyclebackend.request;
 
 /**
- * Represents a user's profile in the DermiCycle system.
+ * Represents a request for user registration in the DermiCycle system.
  */
-@Entity
-@Table(name = "UserProfile")
-public class UserProfile {
-    @Id
-    @Column
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @Column
+public class RegisterRequest {
+    private String emailAddress;
     private String firstName;
-
-    @Column
     private String skinCyclePreference;
-
-    @Column
     private String skinType;
-
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
-    private User user;
+    private String password;
 
     /**
-     * Default constructor for the UserProfile class.
+     * Default constructor for the RegisterRequest class.
      */
-    public UserProfile() {
+    public RegisterRequest() {
     }
 
     /**
-     * Parameterized constructor for the UserProfile class.
+     * Parameterized constructor for the RegisterRequest class.
      *
-     * @param firstName           The first name of the user.
-     * @param skinCyclePreference The skin cycle preference of the user.
-     * @param skinType            The skin type of the user.
+     * @param emailAddress         The email address of the user.
+     * @param firstName            The first name of the user.
+     * @param skinCyclePreference  The skin cycle preference of the user.
+     * @param skinType             The skin type of the user.
+     * @param password             The password of the user.
      */
-    public UserProfile(String firstName, String skinCyclePreference, String skinType) {
+    public RegisterRequest(String emailAddress, String firstName, String skinCyclePreference, String skinType, String password) {
+        this.emailAddress = emailAddress;
         this.firstName = firstName;
         this.skinCyclePreference = skinCyclePreference;
         this.skinType = skinType;
+        this.password = password;
     }
 
     /**
-     * Get the unique identifier of the user's profile.
+     * Get the email address of the user.
      *
-     * @return The user's profile's unique identifier.
+     * @return The email address of the user.
      */
-    public Long getId() {
-        return id;
+    public String getEmailAddress() {
+        return emailAddress;
     }
 
     /**
-     * Set the unique identifier of the user's profile.
+     * Set the email address of the user.
      *
-     * @param id The user's profile's unique identifier.
+     * @param emailAddress The email address of the user.
      */
-    public void setId(Long id) {
-        this.id = id;
+    public void setEmailAddress(String emailAddress) {
+        this.emailAddress = emailAddress;
     }
 
     /**
@@ -118,20 +106,20 @@ public class UserProfile {
     }
 
     /**
-     * Get the user associated with the user's profile.
+     * Get the password of the user.
      *
-     * @return The user associated with the user's profile.
+     * @return The password of the user.
      */
-    public User getUser() {
-        return user;
+    public String getPassword() {
+        return password;
     }
 
     /**
-     * Set the user associated with the user's profile.
+     * Set the password of the user.
      *
-     * @param user The user associated with the user's profile.
+     * @param password The password of the user.
      */
-    public void setUser(User user) {
-        this.user = user;
+    public void setPassword(String password) {
+        this.password = password;
     }
 }
