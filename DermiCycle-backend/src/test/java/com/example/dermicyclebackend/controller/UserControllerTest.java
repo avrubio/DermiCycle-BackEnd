@@ -97,7 +97,8 @@ public class UserControllerTest {
         mockMvc.perform(MockMvcRequestBuilders.get("/api/users/stage/1/")
                         .header(HttpHeaders.AUTHORIZATION, "Bearer " + generateJwtToken())
                         .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.status().isCreated());
+                .andExpect(MockMvcResultMatchers.status().isCreated())
+                .andDo(print());
     }
 
     private String generateJwtToken() {
