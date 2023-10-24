@@ -4,6 +4,7 @@ import com.example.dermicyclebackend.models.Product;
 import com.example.dermicyclebackend.models.User;
 import com.example.dermicyclebackend.request.ProductWithStage;
 import com.example.dermicyclebackend.response.ProductWithStageResponse;
+import com.example.dermicyclebackend.response.SingleProductResponseWithStageForUser;
 import com.example.dermicyclebackend.security.MyUserDetails;
 import com.example.dermicyclebackend.service.MyUserDetailsService;
 import com.example.dermicyclebackend.service.UserService;
@@ -27,7 +28,9 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 import static com.example.dermicyclebackend.service.UserService.getCurrentLoggedInUser;
@@ -80,26 +83,22 @@ public class UserControllerTest {
                 .andDo(print());
     }
 
+
+
     @Test
     @WithMockUser(username = "ariadna@ga.com")
-    public void getProductUserWithStage() throws Exception {
-        objectMapper.registerModule(new JavaTimeModule());
+    public void getSingleStageForUser() throws Exception {
+        SingleProductResponseWithStageForUser product1 = new SingleProductResponseWithStageForUser(1L, "Stage 1", "1 day", "Test Snail Mucin");
+        List<SingleProductResponseWithStageForUser> productList = new ArrayList<>();
+        productList.add(product1);
 
+        when(userService.getSingleStageForUser(1L)).thenReturn(productList);
 
-
-        // Mock the behavior of the userService to return a product response
-        when(userService.getProductUserWithStage(PRODUCT_1.getId()).thenReturn(PRODUCT_1));
-
-        // Mock the behavior of myUserDetailsService to return the current user
-        MyUserDetails userDetails = setup();
-        when(myUserDetailsService.loadUserByUsername("ariadna@ga.com")).thenReturn(userDetails);
-
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/users/products/{productId}", PRODUCT_1.getId())
-                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + generateJwtToken()))
-                .andExpect(status().isOk())
-                .andDo(print());
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/users/stage/1/")
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + generateJwtToken())
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isCreated());
     }
-
 
     private String generateJwtToken() {
         // Create a JWT token with a specific subject and expiration time

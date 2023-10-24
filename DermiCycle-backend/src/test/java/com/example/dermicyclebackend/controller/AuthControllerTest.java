@@ -3,6 +3,7 @@ package com.example.dermicyclebackend.controller;
 import com.example.dermicyclebackend.models.User;
 import com.example.dermicyclebackend.repository.UserRepository;
 import com.example.dermicyclebackend.request.LoginRequest;
+import com.example.dermicyclebackend.request.RegisterRequest;
 import com.example.dermicyclebackend.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Test;
@@ -51,17 +52,22 @@ public class AuthControllerTest {
     private PasswordEncoder passwordEncoder;
 
     User RECORD_1 = new User(1L, "ariadna@ga.com", "password123");
+RegisterRequest RECORD_2 = new RegisterRequest("av@gmail.com", "ari", "4 day","dry", "password123" );
 
     @Test
     public void createUser() throws Exception {
-        when(userService.createUser(Mockito.any(User.class))).thenReturn(RECORD_1);
+        // Mock the userService.createUser method
+        when(userService.createUser(Mockito.any(RegisterRequest.class))).thenReturn(RECORD_1);
+
+        RegisterRequest registerRequest = RECORD_2;
 
         mockMvc.perform(MockMvcRequestBuilders.post("/auth/users/register/")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(new ObjectMapper().writeValueAsString(RECORD_1)))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(new ObjectMapper().writeValueAsString(registerRequest)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value((RECORD_1.getId())))
+                .andExpect(jsonPath("$.id").value(RECORD_1.getId()))
                 .andExpect(jsonPath("$.emailAddress").value(RECORD_1.getEmailAddress()))
+                .andExpect(jsonPath("$.firstName").value(registerRequest.getFirstName()))
                 .andDo(print());
     }
     @Test
