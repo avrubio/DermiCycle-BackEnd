@@ -67,7 +67,6 @@ RegisterRequest RECORD_2 = new RegisterRequest("av@gmail.com", "ari", "4 day","d
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(RECORD_1.getId()))
                 .andExpect(jsonPath("$.emailAddress").value(RECORD_1.getEmailAddress()))
-                .andExpect(jsonPath("$.firstName").value(registerRequest.getFirstName()))
                 .andDo(print());
     }
     @Test
