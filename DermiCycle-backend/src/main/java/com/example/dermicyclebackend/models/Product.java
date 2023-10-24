@@ -33,23 +33,6 @@ public class Product {
     @JoinColumn(name = "stage_id", referencedColumnName = "id")
     private Stage stage;
 
-    public Stage getStage() {
-        return stage;
-    }
-
-    public void setStage(Stage stage) {
-        this.stage = stage;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-
     public Product() {
     }
 
@@ -59,7 +42,7 @@ public class Product {
         this.directions = directions;
     }
 
-    public ProductWithStage getId() {
+    public Long getId() {
         return id;
     }
 
@@ -83,14 +66,30 @@ public class Product {
         this.directions = directions;
     }
 
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public Stage getStage() {
+        return stage;
+    }
+
+    public void setStage(Stage stage) {
+        this.stage = stage;
+    }
+
     @Override
     public String toString() {
         return "Product{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", directions='" + directions + '\'' +
+                ", user=" + user +
+                ", stage=" + stage +
                 '}';
     }
-
-
 }
