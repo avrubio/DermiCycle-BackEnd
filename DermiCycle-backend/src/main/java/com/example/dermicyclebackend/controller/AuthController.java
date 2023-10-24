@@ -29,7 +29,7 @@ public class AuthController {
     /**
      * Endpoint for registering a new user.
      *
-     * @param userObject The User object representing the user to be registered.
+     * @param registerRequestObject The User object representing the user to be registered.
      * @return The registered User object.
      */
     @PostMapping("/register/") // http://localhost:0317/auth/users/register/
