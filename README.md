@@ -1,6 +1,6 @@
 # DermiCycle-BackEnd
 
-DermiCycle is a skincare cycling application that allows you to track what products to use at what stage.
+DermiCycle Backend is a skincare cycling API that allows account management for DermiCycle
 
 ## Introduction
 
