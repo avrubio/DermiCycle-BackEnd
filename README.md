@@ -55,3 +55,5 @@ After successful login, you will be directed to a welcome loading page.
 
 From there, you will be brought to a home page where you can set your skin cycling pattern preference (e.g., 4-day pattern, 3-day pattern).
 
+## ERD Diagram
+<img src="ERD Diagram (2).png" />
