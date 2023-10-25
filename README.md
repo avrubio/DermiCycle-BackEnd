@@ -38,6 +38,18 @@ Click the "Log In" button.
 Acceptance Criteria: Registered users should be able to click "Log In" to access the login page.
 Enter your email and password.
 
+##### Adding Products
+Logged-in users can add and manage the skincare products they use. Follow these steps to add products:
+
+Click the "Add Products" button.
+
+Acceptance Criteria: Users should be able to access a product management page.
+Provide information about the products you are using, including:
+
+Name of the product
+Directions for use
+Stage (e.g., exfoliation, retinoid, recovery)
+Acceptance Criteria: Users can add products and categorize them according to their stage in the skincare cycle.
 Acceptance Criteria: Users should be able to log in with their email and password.
 After successful login, you will be directed to a welcome loading page.
 
