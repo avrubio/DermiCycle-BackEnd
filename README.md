@@ -29,3 +29,17 @@ Fill out a registration form with the following information:
 - Skin type (e.g., dry, oily, combination)
 - Skin Cycle Preference
 Acceptance Criteria: Users can provide the required information to create their account.
+
+#### Log In
+For registered users, follow these steps to log in:
+
+Click the "Log In" button.
+
+Acceptance Criteria: Registered users should be able to click "Log In" to access the login page.
+Enter your email and password.
+
+Acceptance Criteria: Users should be able to log in with their email and password.
+After successful login, you will be directed to a welcome loading page.
+
+From there, you will be brought to a home page where you can set your skin cycling pattern preference (e.g., 4-day pattern, 3-day pattern).
+
