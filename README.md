@@ -13,3 +13,19 @@ DermiCycle is an application designed to help users manage their skincare routin
 - Sign In: Users can create an account to save personal information and preferences, skin type, and skin cycle preference
 - Product List: The application provides a list that allows users to customize their skin cycling pattern for the entire month.
 - Product Tracking: Users can input the skincare products they have for each stage and manage their routine.
+
+## User Stories
+#### Sign Up
+As a new user, you can create an account by following these steps:
+
+Click the "Sign Up" button to create an account.
+
+Acceptance Criteria: Users should be able to click "Sign Up" to access the registration page.
+Fill out a registration form with the following information:
+
+- Name
+- Email address
+- Password
+- Skin type (e.g., dry, oily, combination)
+- Skin Cycle Preference
+Acceptance Criteria: Users can provide the required information to create their account.
