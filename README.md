@@ -60,6 +60,6 @@ From there, you will be brought to a home page where you can set your skin cycli
 
 
 ## Acknowledgements
-[Suresh Siguera](https://github.com/sureshmelvinsigera) - helped tremendously with my back end to make sure my end points were working properly and that my tests were passing with every new response and request classes we created.
+[Suresh Sigera](https://github.com/sureshmelvinsigera) - helped tremendously with my back end to make sure my end points were working properly and that my tests were passing with every new response and request classes we created.
 
 [Leo Rodriguez]() - helped me properly set up my API calls to make sure I was retrieving the proper response.
