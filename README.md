@@ -1,4 +1,5 @@
 # DermiCycle-BackEnd
+<img src="/DermiCycleBanner2.png"/>
 
 DermiCycle Backend is a skincare cycling API that allows account management for DermiCycle
 
