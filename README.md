@@ -89,7 +89,7 @@ To interact with the DermiCycle API, you can use the following endpoints:
 These challenges demanded a combination of problem-solving, code refactoring, and effective communication between the development team members. Overcoming them was essential to ensure the successful delivery of the project while maintaining its quality and performance standards.
 
 
-# Installation Guided
+# Installation Guide
 `git clone <this repo url>`
 
 make sure to head to the frontend to have this application work with the api calls 
